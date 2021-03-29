@@ -1,0 +1,9 @@
+// @ts-ignore
+import path from 'path';
+
+module.exports = {
+    dbUrl: 'YOUR_URL',
+    port: 3000,
+    cert: path.join( __dirname, 'SSL/TLS/DIR.crt'),
+    key: path.join( __dirname, 'SSL/TLS/DIR.key')
+}

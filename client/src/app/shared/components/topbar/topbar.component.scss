@@ -1,0 +1,12 @@
+@import "~bootstrap/scss/bootstrap";
+
+.font-light {
+  font-size: 0.7rem !important;
+  padding: 1rem;
+  &:hover {
+    background-color: rgb($gray-100, 0.1);
+    transition: 0.5s;
+    font-size: 0.8rem !important;
+    padding: 0.9rem 0.71rem;
+  }
+}

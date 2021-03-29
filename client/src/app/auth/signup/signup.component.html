@@ -1,0 +1,32 @@
+<div class="my-5 py-5" fxLayout="row" fxLayoutAlign="center center">
+  <!--  card -->
+  <mat-card>
+    <mat-card-title class="text-black-50">Inscription</mat-card-title>
+    <!--    Error-->
+    <div *ngIf="error">{{error}}</div>
+    <mat-card-content>
+      <!--      form-->
+      <form [formGroup]="form" class="mat-form">
+        <!--        name-->
+        <mat-form-field class="mat-full-width">
+          <mat-label>Nom</mat-label>
+          <input formControlName="name" matInput type="text"/>
+        </mat-form-field>
+        <!--        Email-->
+        <mat-form-field class="mat-full-width">
+          <mat-label>Email</mat-label>
+          <input formControlName="email" matInput type="email"/>
+        </mat-form-field>
+        <!--        Password -->
+        <mat-form-field class="mat-full-width">
+          <mat-label>Mot de passe</mat-label>
+          <input formControlName="password" matInput type="password"/>
+        </mat-form-field>
+        <!--        button-->
+        <button color="primary" (click)="submit()" mat-raised-button>Inscription</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+</div>
+
