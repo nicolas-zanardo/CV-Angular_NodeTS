@@ -1,0 +1,17 @@
+<div class="container d-flex flex-column justify-content-center align-items-center" style="padding-top: 100px">
+  <div class="w-100 d-flex flex-row justify-content-center">
+    <button mat-raised-button (click)="state='normal'" class="m-2">normal</button>
+    <button mat-raised-button (click)="state='wild'" class="m-2">wild</button>
+  </div>
+  <div class="w-100 d-flex flex-row justify-content-center">
+    <div [@square]="state" class="square"></div>
+  </div>
+  <div class="w-100 d-flex flex-row justify-content-center mt-5">
+    <mat-list *ngIf="display" @list (@list.start)="toggle($event)" (@list.done)="toggle($event)">
+      <mat-list-item> Default value. Specifies a transition effect with a slow start</mat-list-item>
+      <mat-list-item> Default value. Specifies a transition effect with a slow start</mat-list-item>
+      <mat-list-item> Default value. Specifies a transition effect with a slow start</mat-list-item>
+      <mat-list-item> Default value. Specifies a transition effect with a slow start</mat-list-item>
+    </mat-list>
+  </div>
+</div>

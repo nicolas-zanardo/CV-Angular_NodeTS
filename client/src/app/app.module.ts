@@ -26,6 +26,8 @@ import { ProfileComponent } from './profile/profile.component';
 
 // Interceptors
 import {AuthInterceptor} from "./shared/interceptors/auth.interceptor";
+import { AnimationsComponent } from './animations/animations.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -35,7 +37,8 @@ import {AuthInterceptor} from "./shared/interceptors/auth.interceptor";
     SignupComponent,
     SigninComponent,
     TopbarComponent,
-    ProfileComponent
+    ProfileComponent,
+    AnimationsComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +46,8 @@ import {AuthInterceptor} from "./shared/interceptors/auth.interceptor";
     HttpClientModule,
     ReactiveFormsModule,
     AppRoutingModule,
-    LayoutModule
+    LayoutModule,
+    NgbModule
   ],
   providers: [
     {

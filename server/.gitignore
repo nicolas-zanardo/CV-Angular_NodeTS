@@ -52,3 +52,4 @@ src/environment/production.ts
 # key
 key/key
 key/key.pub
+key/mail.key

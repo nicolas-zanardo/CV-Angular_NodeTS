@@ -8,17 +8,19 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatCardModule} from "@angular/material/card";
 import {MatIconModule} from "@angular/material/icon";
 import {MatTooltipModule} from "@angular/material/tooltip";
+import {MatListModule} from "@angular/material/list";
 
 
 const MODULE = [
   FlexLayoutModule,
+  MatListModule,
   MatToolbarModule,
   MatButtonModule,
   MatInputModule,
   MatFormFieldModule,
   MatCardModule,
   MatIconModule,
-  MatTooltipModule
+  MatTooltipModule,
 ]
 
 @NgModule({
