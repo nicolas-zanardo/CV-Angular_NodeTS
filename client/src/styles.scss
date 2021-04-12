@@ -2,8 +2,20 @@
 @import "~bootstrap/scss/bootstrap";
 @import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
 
-.mat-card {
-  background-color: $gray-100;
+mat-card {
+  padding: 0px !important;
+  background: $white !important;
+}
+
+mat-form-field {
+  margin: 1rem 0 !important;
+}
+
+.title-form {
+  background-color: $indigo;
+  border-radius: 4px 4px 0 0;
+  color: $white;
+  padding: 1.5rem;
 }
 
 .link {
@@ -11,8 +23,8 @@
   cursor: pointer;
 }
 
-
 .mat-form {
+  padding: 0 2rem 2rem 2rem;
   min-width: 150px;
   max-width: 500px;
   width: 100%;
@@ -22,7 +34,12 @@
   width: 100%;
 }
 
+.bck {
+  background-color: $indigo;
+  color: white;
+}
 
-
-/* Importing Bootstrap SCSS file. */
-@import '~bootstrap/scss/bootstrap';
+.btn-valid {
+  background-color: $indigo;
+  color: white;
+}

@@ -21,7 +21,13 @@ export class MessagesUsersService {
     'password': [
       { type: 'required', message: 'N\'oubliez pas de mettre un mot de passe' },
       { type: 'minlength', message: `Votre mot de passe doit comprendre ${this.minPassword} caractères` },
-      { type: 'pattern', message: 'Il doit comprendre une minuscule, une majuscule, un nombre et caractère spécial' }
+      { type: 'pattern', message: 'Il doit comprendre une minuscule, une majuscule, un nombre et un caractère spécial' }
+    ],
+    'passwordSingin' : [
+      { type: 'required', message: 'N\'oubliez pas de mettre un mot de passe' },
+    ],
+    'confirmPassword': [
+      { type: 'required', message: 'N\'oubliez pas de confirmer votre mot de passe' }
     ],
     'firstName': [
       { type: 'required', message: 'Le prénom est requis' },

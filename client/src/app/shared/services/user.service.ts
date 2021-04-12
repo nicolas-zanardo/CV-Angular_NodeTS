@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject, Observable} from "rxjs";
-import {switchMap, tap} from "rxjs/operators";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {BehaviorSubject, Observable, of} from "rxjs";
+import {catchError, switchMap, tap} from "rxjs/operators";
 import {User} from "../models/user.model";
+import {EmailModel} from "../models/email.model";
+import PasswordModel from "../models/password.model";
 
 
 @Injectable({
@@ -14,6 +16,23 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
+  private static logs(log: string) {
+    //TODO create log
+    console.info(log);
+  }
+
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.log(error);
+      console.log(`${operation} failed: ${error.message}`);
+      // https://www.learnrxjs.io/operators/creation/of.html
+      return of(result as T);
+    };
+  }
+
+  /**
+   * get Current User
+   */
   public getCurrentUser(): Observable<User | null> {
     if (this.currentUser.value) {
       return this.currentUser;
@@ -28,4 +47,29 @@ export class UserService {
       );
     }
   }
+
+  /**
+   * forgotPassword
+   * --------------
+   * send email for reinitialize the password
+   */
+  public forgotPassword(email: EmailModel): Observable<EmailModel | null> {
+    const httpOptions = {
+      headers : new HttpHeaders({ 'Content-Type': 'application/json' })
+    }
+
+    return this.http.post<EmailModel>(`/api/user/forgot-password/`, email, httpOptions ).pipe(
+      catchError(this.handleError<EmailModel>(`ERROR : ${email.email}`))
+    )
+  }
+
+  public resetPassword(password: string, id: string | null, token: string | null): Observable<PasswordModel | null> {
+    const httpOptions = {
+      headers : new HttpHeaders({ 'Content-Type': 'application/json' })
+    }
+    return this.http.post<PasswordModel>(`/api/user/reset-password/${id}/${token}`, password, httpOptions ).pipe(
+      catchError(this.handleError<PasswordModel>(`ERROR : ${password}`))
+    )
+  }
+
 }

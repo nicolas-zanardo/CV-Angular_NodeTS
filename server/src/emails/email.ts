@@ -1,57 +1,87 @@
-import nodemailer from "nodemailer";
-import fs from "fs";
 import EmailInterface from "../interface/EmailInterface";
 import pug from 'pug';
-const sparkPostTransport = require("nodemailer-sparkpost-transport")
-const EMAIL_KEY = fs.readFileSync('./key/mail.key');
+import Mail from "nodemailer/lib/mailer";
+const env = require(`../environment/${process.env.NODE_ENV}`)
 
-export default  class Email {
+export default class Email {
 
-    private prodTransporter;
-    private devTransporteur;
+    private transporter: any;
+    private readonly from: string;
 
     constructor() {
-        this.prodTransporter = nodemailer.createTransport(sparkPostTransport({
-            sparkPostApiKey: `${EMAIL_KEY}`,
-            endpoint: "https://api.sparkpost.com"
-        }))
-        this.devTransporteur = nodemailer.createTransport({
-            host: "smtp.mailtrap.io",
-            port: 2525,
-            auth: {
-                user: "9088ba2d161ecf",
-                pass: "915a8148319467"
-            }
-        });
+        this.from = env.form;
+        this.transporter = env.email;
     }
 
-    async getTemplate(templateName: string, options: EmailInterface, prod: boolean = false) {
+    /**
+     * getTemplate
+     * ------------
+     * email factory
+     * @param templateName string
+     * @param options EmailInterface
+     */
+    async getTemplate(templateName: string, options: EmailInterface) {
         try {
             const template = await pug.renderFile(
                 `views/emails/${templateName}.pug`,
-                options.metaData
+                options
             );
-            if(prod) {
-                const data = await this.prodTransporter.sendMail({
-                    from: "nicolas-zanardo.com<no-reply@nicolas-zanardo.com>",
-                    to: options.to,
-                    subject: options.subject,
-                    html: template
-                })
-                console.log('PROD: Email send: ', data);
-            } else {
-                const data = await this.devTransporteur.sendMail({
-                    from: "nicolas-zanardo.com<no-reply@nicolas-zanardo.com>",
-                    to: options.to,
-                    subject: options.subject,
-                    html: template
-                })
-                console.log('DEV: Email send: ', data);
-            }
-
+            const data = this.transporter.sendMail({
+                from: this.from,
+                        to: options.to,
+                        subject: options.subject,
+                        html: template
+            }).then((data: Mail) => console.log(data)).catch((e: Error) => {console.log(e.message)})
 
         } catch(e) {
             throw new Error(e);
+        }
+    }
+
+    /**
+     * sendEmailVerification
+     * ---------------------
+     * Checks the user’s email is right
+     * @param options EmailInterface
+     */
+    async sendEmailVerification(options: EmailInterface) {
+        try {
+            const email = {
+                from: this.from,
+                subject: "Vérifier votre email",
+                to: options.to,
+                html: pug.renderFile( `views/emails/verified.pug`, {
+                    name: options.metaData.name,
+                    url: `https://${ options.host }/email-verification/${options.metaData.userId}/${options.metaData.token}`
+                })
+            };
+            const response = await this.transporter.sendMail(email);
+            console.log(response);
+        } catch(e) {
+            throw new Error(e);
+        }
+    }
+
+    /**
+     * sendResetPasswordLink
+     * ---------------------
+     * send a link for reset password
+     * @param options EmailInterface
+     */
+    async sendResetPasswordLink(options: EmailInterface) {
+        try {
+            const email = {
+                from: this.from,
+                subject: "Réinitialiser votre mot de passe",
+                to: options.to,
+                html: pug.renderFile( `views/emails/password-reset.pug`, {
+                    url: `https://${ options.host }/reset-password/${ options.metaData.userId }/${ options.metaData.token }`
+                })
+            };
+            const response = await this.transporter.sendMail(email);
+            console.log(response);
+        } catch (e) {
+            throw e;
         }
     }
 }

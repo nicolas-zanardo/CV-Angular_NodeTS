@@ -1,0 +1,22 @@
+@import "~bootstrap/scss/bootstrap";
+.sidenav {
+  display: block;
+  position: absolute;
+  z-index: 1000;
+  height: 93.2vh;
+  width: 200px;
+  background-color: $purple;
+}
+
+.font-light {
+  font-size: 0.8rem !important;
+  padding: 1.5rem;
+  color:  rgb($white, 0.9);
+  &:hover {
+    background-color: rgb($gray-100, 0.1);
+    transition: 0.5s;
+    font-size: 0.9rem !important;
+    padding: 2rem 1.27rem;
+    color: $white;
+  }
+}

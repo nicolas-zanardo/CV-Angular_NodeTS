@@ -6,13 +6,15 @@ import {SigninComponent} from "./auth/signin/signin.component";
 import {ProfileComponent} from "./profile/profile.component";
 import {AuthGuard} from "./shared/guards/auth.guard";
 import {AnimationsComponent} from "./animations/animations.component";
+import {PasswordResetComponent} from "./auth/password-reset/password-reset.component";
 
 const routes: Routes = [
   { path: '', component: HomepageComponent },
   { path: 'animation', component: AnimationsComponent },
   { path: 'signup', component:SignupComponent},
   { path: 'signin', component: SigninComponent},
-  { path: 'profile', canActivate: [AuthGuard], component: ProfileComponent}
+  { path: 'profile', canActivate: [AuthGuard], component: ProfileComponent},
+  { path: 'reset-password/:id/:token', component: PasswordResetComponent }
 ];
 
 @NgModule({

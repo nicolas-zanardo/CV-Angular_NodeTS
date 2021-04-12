@@ -9,13 +9,13 @@ require("./Database");
 
 const app: Express = express();
 
-new email().getTemplate("email-welcome", {
-    to: "contact@nicolas-zanardo.com",
-    subject: "Promotion sur touts le shop",
-    metaData: {
-        name: "Jean"
-    }
-})
+// new email().getTemplate("email-welcome", {
+//     to: "contact@nicolas-zanardo.com",
+//     subject: "Promotion sur touts le shop",
+//     metaData: {
+//         name: "Marc"
+//     }
+// });
 
 // Tools NodeJS Express
 app.use(logger('dev'));

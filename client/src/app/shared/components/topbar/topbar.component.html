@@ -1,5 +1,10 @@
-<mat-toolbar fxLayoutGap="15px" color="primary">
-  <span class="link" routerLink="/">Nicolas Zanardo</span>
+<mat-toolbar fxLayoutGap="15px" class="bck">
+  <div class="example-sidenav-content">
+    <button type="button" mat-mini-fab color="primary"  (click)="toggleSidenav()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </div>
+  <span class="link" routerLink="/">nicolas-zanardo.com</span>
   <span fxFlex="auto">
     <span class="link font-light" routerLink="/animation">Animation</span>
   </span>

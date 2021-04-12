@@ -1,14 +1,14 @@
 <div class="my-5 py-5" fxLayout="row" fxLayoutAlign="center center">
   <!--  card -->
   <mat-card>
-    <mat-card-title class="text-black-50">Inscription</mat-card-title>
+    <h3 class="title-form">Inscription</h3>
     <!--    Error-->
     <div *ngIf="error" class="text-danger">{{error}}</div>
     <mat-card-content>
       <!--      form-->
-      <form [formGroup]="form" class="mat-form mt-2">
+      <form [formGroup]="form" class="mat-form">
         <!--        name-->
-        <mat-form-field class="mat-full-width mt-2" floatLabel="auto">
+        <mat-form-field class="mat-full-width " floatLabel="auto">
           <mat-label>name</mat-label>
           <input matInput autocomplete="off" formControlName="name" placeholder="{{messages.minUser}} caractères minimum">
           <mat-error *ngFor="let validation of messages.validation.name">
@@ -18,7 +18,7 @@
           </mat-error>
         </mat-form-field>
         <!--        Email-->
-        <mat-form-field class="mat-full-width mt-2" floatLabel="auto">
+        <mat-form-field class="mat-full-width" floatLabel="auto">
           <mat-label>email</mat-label>
           <input matInput placeholder="mon@mail.fr" autocomplete="off" required formControlName="email">
           <mat-icon matSuffix>mail</mat-icon>
@@ -29,7 +29,7 @@
           </mat-error>
         </mat-form-field>
         <!--        Password -->
-        <mat-form-field class="matfield mat-full-width mt-2" floatLabel="auto">
+        <mat-form-field class="matfield mat-full-width" floatLabel="auto">
           <mat-label>Mot de passe</mat-label>
           <input matInput autocomplete="off" required formControlName="password" [type]="hidePW ? 'text' : 'password'"
                  autocomplete="off" placeholder="{{messages.minPassword}} caratères minimums">

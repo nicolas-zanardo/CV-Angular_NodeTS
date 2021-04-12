@@ -26,16 +26,16 @@ export class AuthService {
     private router: Router
   ) {
     this.initToken();
-    this. subscription = this.initTimer();
+    this.subscription = this.initTimer();
   }
 
   // Timer to refresh Token - VALUE_OF_TIMER Timer(5min,15min)
   public initTimer() {
     return timer(300000, 900000).pipe(
       switchMap( () => {
-        console.log('try to refresh token');
+        // console.log('try to refresh token');
         if (localStorage.getItem('jwt')) {
-          console.log('Refresh token');
+          // console.log('Refresh token');
             return this.http.get<string>('/api/auth/refresh-token').pipe(
               tap((token:string)=> {
                 this.jwtToken.next({
@@ -46,7 +46,7 @@ export class AuthService {
               })
             );
         } else {
-          console.log('NO TOKEN');
+          // console.log('NO TOKEN');
           return of(null);
         }
       })

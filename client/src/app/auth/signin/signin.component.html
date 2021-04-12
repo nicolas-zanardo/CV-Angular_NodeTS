@@ -1,12 +1,14 @@
 <div class="my-5 py-5" fxLayout="row" fxLayoutAlign="center center">
   <!--  card -->
   <mat-card>
-    <mat-card-title class="text-black-50">Connexion</mat-card-title>
+    <h3 class="title-form">Connexion</h3>
     <!--    Error-->
-    <div *ngIf="error" class="text-danger">{{error}}</div>
-    <mat-card-content class="mt-2">
+    <div class="message-error">
+      <div *ngIf="error" class="text-danger">{{error}}</div>
+    </div>
+    <mat-card-content>
       <!--      form-->
-      <form [formGroup]="form" class="mat-form">
+      <form [formGroup]="form" class="mat-form" #formDirective="ngForm" (ngSubmit)="submit(formDirective)" novalidate>
         <!--        Email-->
         <mat-form-field class="mat-full-width" floatLabel="auto">
           <mat-label>email</mat-label>
@@ -19,7 +21,7 @@
           </mat-error>
         </mat-form-field>
         <!--        Password -->
-        <mat-form-field class="matfield mat-full-width mt-2" floatLabel="auto">
+        <mat-form-field class="matfield mat-full-width" floatLabel="auto">
           <mat-label>Mot de passe</mat-label>
           <input matInput autocomplete="off" required formControlName="password" [type]="hidePW ? 'text' : 'password'"
                  autocomplete="off">
@@ -33,8 +35,16 @@
           </mat-error>
         </mat-form-field>
         <!--        button-->
-        <button class="mt-4" color="primary" (click)="submit()" mat-raised-button>Connexion</button>
-        <a class="mx-2" routerLink="/signup" mat-raised-button>Inscription</a>
+        <div class="d-flex justify-content-between align-items-center flex-wrap mt-3">
+          <div class="order-2 order-sm-1">
+            <a mat-button (click)="openDialog(formDirective)">Mot de passe oublier?</a>
+          </div>
+          <div class="d-flex justify-content-between align-items-center order-1 order-sm-2">
+            <a class="mx-2" routerLink="/signup" mat-raised-button>Inscription</a>
+            <button color="primary" mat-raised-button>Connexion</button>
+          </div>
+        </div>
+
       </form>
     </mat-card-content>
   </mat-card>

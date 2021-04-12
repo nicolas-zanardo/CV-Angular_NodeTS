@@ -1,9 +1,19 @@
-// @ts-ignore
-import path from 'path';
+// import path from 'path';
+// import nodemailer from "nodemailer";
 
-module.exports = {
-    dbUrl: 'YOUR_URL',
-    port: 3000,
-    cert: path.join( __dirname, 'SSL/TLS/DIR.crt'),
-    key: path.join( __dirname, 'SSL/TLS/DIR.key')
-}
+// module.exports = {
+//     dbUrl: '',
+//     port: '',
+//     cert: path.join(__dirname, ''),
+//     key: path.join(__dirname, ''),
+//     status: 'development',
+//     email: nodemailer.createTransport({
+//         host: "",
+//         port: "",
+//         auth: {
+//             user: "",
+//             pass: ""
+//         }
+//     }),
+//     from: "your-email.com <no-replay@your-email.com>"
+// }

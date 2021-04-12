@@ -8,6 +8,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 // Modules
 import { AppRoutingModule } from './app-routing.module';
 import {LayoutModule} from "./shared/layout/layout.module";
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 // Guard
 import {AuthGuard} from "./shared/guards/auth.guard";
@@ -23,11 +24,20 @@ import { SignupComponent } from './auth/signup/signup.component';
 import { SigninComponent } from './auth/signin/signin.component';
 import { TopbarComponent } from './shared/components/topbar/topbar.component';
 import { ProfileComponent } from './profile/profile.component';
+import { AnimationsComponent } from './animations/animations.component';
+import { PasswordResetComponent } from './auth/password-reset/password-reset.component';
+import { PasswordChangeComponent } from "./auth/password-change/password-change.component";
+import { SidenavComponent } from './shared/components/sidenav/sidenav.component';
 
 // Interceptors
 import {AuthInterceptor} from "./shared/interceptors/auth.interceptor";
-import { AnimationsComponent } from './animations/animations.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
+// Pipe
+import { BooleanToStringPipe } from './shared/pipe/boolean-to-string.pipe';
+
+
+
+
 
 
 @NgModule({
@@ -38,7 +48,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     SigninComponent,
     TopbarComponent,
     ProfileComponent,
-    AnimationsComponent
+    AnimationsComponent,
+    BooleanToStringPipe,
+    PasswordChangeComponent,
+    PasswordResetComponent,
+    SidenavComponent,
   ],
   imports: [
     BrowserModule,

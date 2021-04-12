@@ -36,7 +36,7 @@ export class SignupComponent implements OnInit {
       password: new FormControl('', Validators.compose([
         Validators.required,
         Validators.minLength(this.messages.minPassword),
-        Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\\W)[a-zA-Z0-9$/ \\W]+$')
+        Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\\W)[a-zA-Z0-9_$/ \\W]+$')
       ]))
     })
   }

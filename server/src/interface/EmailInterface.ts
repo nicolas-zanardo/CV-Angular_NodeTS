@@ -1,7 +1,13 @@
 export default interface EmailInterface {
-    to: string,
-    subject: string,
+    from?: string,
+    to?: string,
+    subject?: string,
+    host?: string,
     metaData: {
-        name:string
+        email?: string,
+        userId?:string,
+        name?:string,
+        url?:string,
+        token?:string,
     }
 }

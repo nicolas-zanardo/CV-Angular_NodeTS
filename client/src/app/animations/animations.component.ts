@@ -1,6 +1,5 @@
 import {Component, EventEmitter, OnInit} from '@angular/core';
 import {animate, group, keyframes, query, stagger, state, style, transition, trigger} from "@angular/animations";
-import {Event} from "@angular/router";
 
 @Component({
   selector: 'app-animations',

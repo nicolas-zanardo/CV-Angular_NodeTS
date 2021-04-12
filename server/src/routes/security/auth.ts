@@ -5,6 +5,8 @@ import UserInterface from "../../interface/UserInterface";
 import bcrypt from "bcrypt";
 import jwt, {VerifyErrors} from "jsonwebtoken";
 import * as fs from "fs";
+import Email from "../../emails/email";
+import { v4 as uuidv4 } from 'uuid';
 
 export const auth = Router();
 
@@ -16,20 +18,31 @@ auth.post('/signup', (req:Request, res:Response) => {
     const newUser = new User({
         email: req.body.email,
         name: req.body.name,
+        emailToken: uuidv4() ,
         password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10)),
-        role: ['ROLE_USER']
+        role: ['ROLE_USER'],
+        emailVerified: false
     });
     newUser.save((err:CallbackError)=> {
         console.log(err)
-        if(err) { return res.status(406).json("l'email existe déjà") }
+        if(err) { return res.status(406).json("l'email existe déjà") };
         return res.status(200).json('user_create')
     });
+    new Email().sendEmailVerification({
+        to: newUser.email,
+        subject: "Vérifiez votre email",
+        host: req.headers.host,
+        metaData: {
+            name: newUser.name,
+            userId: newUser._id,
+            token: newUser.emailToken,
+        }});
 });
 
 // Router() => create token
 auth.post('/signin', (req:Request, res:Response) => {
     User.findOne({'email': req.body.email}).exec((err: CallbackError, user:UserInterface ) => {
-        if (user && bcrypt.compareSync(req.body.password, user.password)) {
+        if (user && bcrypt.compareSync(req.body.password, user.password) && user.emailVerified) {
             const token = jwt.sign({
                 role: user.role,
                 name: user.name,
@@ -40,6 +53,8 @@ auth.post('/signin', (req:Request, res:Response) => {
                 subject: user._id.toString()
             });
             res.status(200).json(token);
+        } else if (!user.emailVerified) {
+            res.status(400).json('valider votre email')
         } else {
             res.status(401).json('signin_fail')
         }

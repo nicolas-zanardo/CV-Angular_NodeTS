@@ -1,4 +1,4 @@
-import mongoose, {Document, Model} from "mongoose";
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -17,6 +17,8 @@ const userSchema = new mongoose.Schema({
             message: props => `${props.value} is not a valid email!`
         }
     },
+    emailToken: { type: String },
+    emailVerified: { type: Boolean, default: false},
     password: {
         type: String,
         required: true,
@@ -28,6 +30,8 @@ const userSchema = new mongoose.Schema({
             message: props => `${props.value} is not a valid password!`
         }
     },
+    passwordToken: {type: String},
+    passwordTokenExpiration: {type: Date},
     role: []
 });
 
