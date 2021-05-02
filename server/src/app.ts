@@ -3,19 +3,10 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import {index} from "./routes";
-import email from "./emails/email"
 // Database
 require("./Database");
 
 const app: Express = express();
-
-// new email().getTemplate("email-welcome", {
-//     to: "contact@nicolas-zanardo.com",
-//     subject: "Promotion sur touts le shop",
-//     metaData: {
-//         name: "Marc"
-//     }
-// });
 
 // Tools NodeJS Express
 app.use(logger('dev'));

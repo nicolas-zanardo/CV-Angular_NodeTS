@@ -5,47 +5,39 @@ import {Inject, Injectable} from '@angular/core';
 })
 export class MessagesUsersService {
 
-  public minUser: number = 4;
-  public maxUser: number = 50;
+  public maxCharacters: number = 100;
   public minPassword: number = 8;
+  public maxNumberPhone: number = 20;
+  public minNumberPhone: number = 10;
 
   constructor() {}
 
   public validation = {
-    'username': [
-      { type: 'required', message: 'Le pseudo est obligatoire' },
-      { type: 'minlength', message: `Il doit comprendre ${this.minUser} caratères minimun` },
-      { type: 'maxlength', message: `Il ne doit pas depasser ${this.maxUser} caractères` },
-      { type: 'pattern', message: 'Une MAJUSCULE et Un CHIFFRE est obligatoire et des minuscules' }
+    'company': [
+      { type: 'required', message: 'Veuillez renseigner le nom de votre entreprise' },
+      { type: 'maxlength', message: `Nombre de caractère maximum ${this.maxCharacters}`}
     ],
     'password': [
       { type: 'required', message: 'N\'oubliez pas de mettre un mot de passe' },
       { type: 'minlength', message: `Votre mot de passe doit comprendre ${this.minPassword} caractères` },
+      { type: 'maxlength', message: `Nombre de caractère maximum ${this.maxCharacters}`},
       { type: 'pattern', message: 'Il doit comprendre une minuscule, une majuscule, un nombre et un caractère spécial' }
     ],
-    'passwordSingin' : [
-      { type: 'required', message: 'N\'oubliez pas de mettre un mot de passe' },
+    'phone': [
+      { type: 'minlength', message: `Nombre de caractère minium ${this.minNumberPhone}`},
+      { type: 'maxlength', message: `Nombre de caractère maximum ${this.maxNumberPhone}`},
+      { type: 'pattern', message: `Fomat :  +33512345678 - 0033512345678 - 0612345678`}
     ],
     'confirmPassword': [
-      { type: 'required', message: 'N\'oubliez pas de confirmer votre mot de passe' }
+      { type: 'required', message: 'Veuillez confirmer votre mot de passe' }
     ],
     'firstName': [
+      { type: 'maxlength', message: `Nombre de caractère maximum ${this.maxNumberPhone}`},
       { type: 'required', message: 'Le prénom est requis' },
-      { type: 'minlength', message: `Il doit comprendre ${this.minUser} caratères minimun` },
-      { type: 'maxlength', message: `Il ne doit pas depasser ${this.maxUser} caractères` },
-      { type: 'pattern', message: 'Les caractères spéciaux sont interdit' }
     ],
     'lastName': [
-      { type: 'required', message: 'Le prénom est requis' },
-      { type: 'minlength', message: `Il doit comprendre ${this.minUser} caratères minimun` },
-      { type: 'maxlength', message: `Il ne doit pas depasser ${this.maxUser} caractères` },
-      { type: 'pattern', message: 'Les caractères spéciaux sont interdit' }
-    ],
-    'name': [
-      { type: 'required', message: 'Le nom est requis'},
-      { type: 'minlength', message: `Il doit comprendre ${this.minUser} caratères minimun` },
-      { type: 'maxlength', message: `Il ne doit pas depasser ${this.maxUser} caractères` },
-      { type: 'pattern', message: 'Les caractères spéciaux sont interdit' }
+      { type: 'maxlength', message: `Nombre de caractère maximum ${this.maxNumberPhone}`},
+      { type: 'required', message: 'Le nom est requis' },
     ],
     'email': [
       { type: 'required', message: 'l\'Email est obligatoire' },

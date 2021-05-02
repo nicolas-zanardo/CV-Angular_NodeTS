@@ -1,2 +1,8 @@
+@import "../media";
 
+app-sidenav {
+  @include tablets {
+    display: none;
+  }
+}
 

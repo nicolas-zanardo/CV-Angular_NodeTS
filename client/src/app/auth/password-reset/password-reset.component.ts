@@ -4,7 +4,7 @@ import {MessagesUsersService} from "../../shared/messages/messages-users.service
 import {PasswordErrorMatcher} from "./password-error-matcher";
 import {UserService} from "../../shared/services/user.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import PasswordModel from "../../shared/models/password.model";
+import {PasswordModel} from "../../shared/models/user.model";
 
 @Component({
   selector: 'app-password-reset',
@@ -21,10 +21,14 @@ export class PasswordResetComponent implements OnInit {
   private id!: string | null;
   private token!: string | null;
 
+  public error?: string;
+
+
   constructor(
     private fb: FormBuilder,
     public messages: MessagesUsersService,
     private userService: UserService,
+    private router: Router,
     private activatedRoute: ActivatedRoute,
   ) { }
 
@@ -56,17 +60,20 @@ export class PasswordResetComponent implements OnInit {
   public submit(formDirective: FormGroupDirective): void {
     if(this.form.valid) {
       this.userService.resetPassword(this.form.value, this.id, this.token)
-        .subscribe((data) =>  PasswordResetComponent.handleSuccess(data, formDirective),
-        (error: Error) => PasswordResetComponent.handleError(error)
+        .subscribe((data:PasswordModel | null) =>  this.handleSuccess(data, formDirective),
+        (error) => this.handleError(error)
       );
     }
   }
 
-  private static handleSuccess(data: PasswordModel | null, formDirective: FormGroupDirective) {
-    formDirective.resetForm();
+  private handleSuccess(data: PasswordModel | null, formDirective: FormGroupDirective) {
+    this.router.navigate(['/signin']).catch((err: Error) => console.log(err));
+
   }
-  private static handleError(err: Error) {
-    console.log(`MESSAGE FormValidation = ERROR`, err)
+  private handleError(err:any) {
+    if(err.status === 401) {
+      this.error = "Le token a expiré"
+    }
   }
 
 }

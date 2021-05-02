@@ -3,36 +3,76 @@ import {findUserPerEmail, findUserPerId} from "../Database/queries/users.queries
 import { v4 as uuidv4 } from 'uuid';
 import moment from "moment";
 import Email from "../emails/email";
-import UserInterface from "../interface/UserInterface";
 import bcrypt from "bcrypt";
+
+
+export const getEmailToken = async(req: Request, res: Response, next: NextFunction) => {
+  try {
+      const id = req.params.id;
+      const user:any = await findUserPerId(id);
+      if(user) {
+          return res.status(200).json(user.emailToken);
+      } else {
+          return res.status(404).end();
+      }
+  }  catch (e) {
+      next(e);
+  }
+};
 
 export const emailLinkVerification = async(req: Request, res: Response, next: NextFunction) => {
     try {
         const { userId, token } = req.params;
-        const user = await findUserPerId(userId);
-        console.log(user);
+        const user: any = await findUserPerId(userId);
         if (user && token && (token === user.emailToken)) {
             user.emailVerified = true;
             await user.save();
-            return res.redirect("/");
+            res.status(200);
+            return res.redirect(`/email-verification/${userId}/${token}`);
         } else {
-            return res.status(400).json('Problem during email verification');
+            return res.status(400).end();
         }
     } catch (e) {
         next(e);
     }
 };
 
+export const semEmailVerification = async(req: Request, res: Response, next: NextFunction) => {
+    try {
+        const emailObj = req.body;
+        if(emailObj) {
+            const user: any = await findUserPerEmail(emailObj.email);
+            await new Email().sendEmailVerification({
+                to: user.email,
+                subject: "Vérifiez votre email",
+                host: req.headers.host,
+                metaData: {
+                    name: user.name,
+                    userId: user._id,
+                    token: user.emailToken,
+                }})
+            res.status(200).end();
+        } else {
+            res.status(404).end();
+        }
+    } catch (e) {
+        next(e);
+    }
+}
+
 export const initResetPassword = async(req: Request, res: Response, next: NextFunction) => {
     try {
         const {email} = req.body;
+        console.log('BEFORE ', email);
         if (email) {
-            const user = await findUserPerEmail(email);
+            console.log('IN ', email);
+            const user: any = await findUserPerEmail(email);
+            console.log('USER ', user);
             if(user) {
                 user.passwordToken = uuidv4();
                 user.passwordTokenExpiration = moment().add(2.5, 'hours').toDate();
                 await user.save();
-                await new Email().sendResetPasswordLink({
+               let emailCheck =  await new Email().sendResetPasswordLink({
                     to: email,
                     host: req.headers.host,
                     metaData: {
@@ -40,10 +80,11 @@ export const initResetPassword = async(req: Request, res: Response, next: NextFu
                         token: user.passwordToken,
                     }
                 })
+                console.log(emailCheck)
                 return res.status(200).end();
             }
         }
-        return res.status(400).json('Utilisateur inconnu')
+        return res.status(200).end();
     } catch (e) {
         next(e);
     }
@@ -51,12 +92,12 @@ export const initResetPassword = async(req: Request, res: Response, next: NextFu
 
 export const resetPasswordForm = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { userId, token } = req.params;
-        const user: UserInterface = await findUserPerId(userId);
+        const { userID, token } = req.params;
+        const user: any = await findUserPerId(userID);
         if (user && user.passwordToken === token) {
             return res.status(200).json(user);
         } else {
-            return res.status(400).json(`l'utilisateur n'existe pas`)
+            return res.status(400).end();
         }
     } catch (e) {
         next(e);
@@ -67,7 +108,7 @@ export const resetPassword = async (req: Request, res: Response, next: NextFunct
     try {
         const { userID, token } = req.params;
         const { password } = req.body;
-        const user = await findUserPerId(userID);
+        const user: any = await findUserPerId(userID);
         if (password &&
             user &&
             user.passwordToken === token &&
@@ -77,8 +118,11 @@ export const resetPassword = async (req: Request, res: Response, next: NextFunct
             user.passwordToken = null;
             user.passwordTokenExpiration = null;
             await user.save()
+            return  res.status(200).end();
+        } else if (!user.passwordToken) {
+            return res.status(401).end();
         } else {
-            return res.status(400).json(`L'utilisateur n'existe pas`)
+            return res.status(400).end();
         }
     } catch (e) {
         next(e);

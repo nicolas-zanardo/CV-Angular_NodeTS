@@ -1,52 +1,138 @@
-<div class="my-5 py-5" fxLayout="row" fxLayoutAlign="center center">
-  <!--  card -->
+<div class="container" fxLayoutAlign="center center">
+
   <mat-card>
-    <h3 class="title-form">Inscription</h3>
-    <!--    Error-->
-    <div *ngIf="error" class="text-danger">{{error}}</div>
-    <mat-card-content>
-      <!--      form-->
-      <form [formGroup]="form" class="mat-form">
-        <!--        name-->
-        <mat-form-field class="mat-full-width " floatLabel="auto">
-          <mat-label>name</mat-label>
-          <input matInput autocomplete="off" formControlName="name" placeholder="{{messages.minUser}} caractères minimum">
-          <mat-error *ngFor="let validation of messages.validation.name">
-            <mat-error *ngIf="form.get('name')!.hasError(validation.type)">
-              {{validation.message}}
-            </mat-error>
-          </mat-error>
-        </mat-form-field>
-        <!--        Email-->
-        <mat-form-field class="mat-full-width" floatLabel="auto">
-          <mat-label>email</mat-label>
-          <input matInput placeholder="mon@mail.fr" autocomplete="off" required formControlName="email">
-          <mat-icon matSuffix>mail</mat-icon>
-          <mat-error *ngFor="let validation of messages.validation.email">
-            <mat-error *ngIf="form.get('email')!.hasError(validation.type)">
-              {{validation.message}}
-            </mat-error>
-          </mat-error>
-        </mat-form-field>
-        <!--        Password -->
-        <mat-form-field class="matfield mat-full-width" floatLabel="auto">
-          <mat-label>Mot de passe</mat-label>
-          <input matInput autocomplete="off" required formControlName="password" [type]="hidePW ? 'text' : 'password'"
-                 autocomplete="off" placeholder="{{messages.minPassword}} caratères minimums">
-          <mat-icon matSuffix
-                    (click)="hidePW = !hidePW">{{hidePW ? 'visibility' : 'visibility_off'}}
-          </mat-icon>
-          <mat-error *ngFor="let validation of messages.validation.password">
-            <mat-error *ngIf="form.get('password')!.hasError(validation.type)">
-              {{validation.message}}
-            </mat-error>
-          </mat-error>
-        </mat-form-field>
-        <!--        button-->
-        <button class="mt-4" color="primary" (click)="submit()" mat-raised-button>Inscription</button>
-      </form>
-    </mat-card-content>
+
+    <!--    title-->
+    <mat-card-title>Inscription</mat-card-title>
+
+    <!--    FORM-->
+    <form [formGroup]="form" #formDirective="ngForm"  (ngSubmit)="submit(formDirective)" novalidate>
+
+      <!--
+       ----- Input -----
+       FORM element
+       -->
+
+      <div class="p-3">
+
+        <div class="block-input">
+          <!--        COMPANY-->
+          <mat-card-content>
+            <mat-form-field floatLabel="auto">
+              <mat-label>company</mat-label>
+              <input matInput autocomplete="off" required formControlName="company">
+              <mat-error *ngFor="let validation of messages.validation.company">
+                <mat-error *ngIf="form.get('company')!.hasError(validation.type)">
+                  {{validation.message}}
+                </mat-error>
+              </mat-error>
+            </mat-form-field>
+          </mat-card-content>
+
+          <!--        PHONE-->
+          <mat-card-content>
+            <mat-form-field floatLabel="auto">
+              <mat-label>Téléphone</mat-label>
+              <input matInput autocomplete="off" formControlName="phone">
+              <mat-error *ngFor="let validation of messages.validation.phone">
+                <mat-error *ngIf="form.get('phone')!.hasError(validation.type)">
+                  {{validation.message}}
+                </mat-error>
+              </mat-error>
+            </mat-form-field>
+          </mat-card-content>
+
+        </div>
+
+        <div class="block-input">
+
+          <!--        LASTNAME-->
+          <mat-card-content>
+            <mat-form-field floatLabel="auto">
+              <mat-label>Nom</mat-label>
+              <input matInput autocomplete="off" required formControlName="lastName">
+              <mat-error *ngFor="let validation of messages.validation.lastName">
+                <mat-error *ngIf="form.get('lastName')!.hasError(validation.type)">
+                  {{validation.message}}
+                </mat-error>
+              </mat-error>
+            </mat-form-field>
+          </mat-card-content>
+
+          <!--        FIRSTNAME-->
+          <mat-card-content>
+            <mat-form-field floatLabel="auto">
+              <mat-label>Prénom</mat-label>
+              <input matInput autocomplete="off" formControlName="firstName">
+              <mat-error *ngFor="let validation of messages.validation.firstName">
+                <mat-error *ngIf="form.get('firstName')!.hasError(validation.type)">
+                  {{validation.message}}
+                </mat-error>
+              </mat-error>
+            </mat-form-field>
+          </mat-card-content>
+
+        </div>
+
+        <div class="block-input">
+
+          <!--        EMAIL-->
+          <mat-card-content>
+            <mat-form-field floatLabel="auto">
+              <mat-label>email</mat-label>
+              <input matInput placeholder="mon@mail.fr" autocomplete="off" required formControlName="email">
+              <mat-icon matSuffix>mail</mat-icon>
+              <mat-error *ngFor="let validation of messages.validation.email">
+                <mat-error *ngIf="form.get('email')!.hasError(validation.type)">
+                  {{validation.message}}
+                </mat-error>
+              </mat-error>
+            </mat-form-field>
+          </mat-card-content>
+
+          <!--       PASSWORD-->
+          <mat-card-content>
+            <mat-form-field floatLabel="auto">
+              <mat-label>Mot de passe</mat-label>
+              <!--          input-->
+              <input matInput autocomplete="off"
+                     required formControlName="password" [type]="hidePW ? 'text' : 'password'"
+                     autocomplete="off"
+              >
+              <!--          icon-->
+              <mat-icon matSuffix
+                        (click)="hidePW = !hidePW">{{hidePW ? 'visibility' : 'visibility_off'}}
+              </mat-icon>
+              <!--          error-->
+              <mat-error *ngFor="let validation of messages.validation.password">
+                <mat-error *ngIf="form.get('password')!.hasError(validation.type)">
+                  {{validation.message}}
+                </mat-error>
+              </mat-error>
+            </mat-form-field>
+          </mat-card-content>
+
+        </div>
+
+        <!--      button-->
+        <mat-card-actions class="d-flex justify-content-end">
+          <button mat-raised-button color="primary" class="order-1">
+            <span class="material-icons">
+              fingerprint
+            </span>
+            Inscription
+          </button>
+          <button mat-raised-button class="order-0" routerLink="/connection">
+            <span class="material-icons">
+              lock
+            </span>
+            Connection
+          </button>
+        </mat-card-actions>
+
+      </div>
+    </form>
+
   </mat-card>
 
 </div>
-

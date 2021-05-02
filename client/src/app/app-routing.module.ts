@@ -7,18 +7,20 @@ import {ProfileComponent} from "./profile/profile.component";
 import {AuthGuard} from "./shared/guards/auth.guard";
 import {AnimationsComponent} from "./animations/animations.component";
 import {PasswordResetComponent} from "./auth/password-reset/password-reset.component";
+import {EmailVerificationComponent} from "./email/email-verification/email-verification.component";
 
 const routes: Routes = [
   { path: '', component: HomepageComponent },
   { path: 'animation', component: AnimationsComponent },
-  { path: 'signup', component:SignupComponent},
-  { path: 'signin', component: SigninComponent},
+  { path: 'inscription', component:SignupComponent},
+  { path: 'connection', component: SigninComponent},
   { path: 'profile', canActivate: [AuthGuard], component: ProfileComponent},
-  { path: 'reset-password/:id/:token', component: PasswordResetComponent }
+  { path: 'reset-password/:id/:token', component: PasswordResetComponent },
+  { path: 'email-verification/:id/:token', component: EmailVerificationComponent}
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

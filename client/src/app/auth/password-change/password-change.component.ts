@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
 import {MessagesUsersService} from "../../shared/messages/messages-users.service";
 import {UserService} from "../../shared/services/user.service";
-import {EmailModel} from "../../shared/models/email.model";
+import {EmailModel} from "../../shared/models/user.model";
 
 @Component({
   selector: 'app-change-password',
@@ -33,7 +33,6 @@ export class PasswordChangeComponent implements OnInit {
   }
 
   public submit(formDirective: FormGroupDirective): void {
-    console.log(this.form.value.email)
     if(this.form.valid) {
       this.userService.forgotPassword(this.form.value)
         .subscribe(data => PasswordChangeComponent.handleSuccess(data, formDirective),
@@ -43,10 +42,9 @@ export class PasswordChangeComponent implements OnInit {
   };
 
   private static handleSuccess(data: EmailModel | null, formDirective: FormGroupDirective) {
-    console.log(`MESSAGE FormValidation = Form Valid !!! if message undefined, data doesn't send`, data)
     formDirective.resetForm();
   }
   private static handleError(err: Error) {
-    console.log(`MESSAGE FormValidation = ERROR`, err)
+
   }
 }

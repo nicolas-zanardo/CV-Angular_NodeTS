@@ -12,6 +12,8 @@ import {MatListModule} from "@angular/material/list";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatSidenavModule} from "@angular/material/sidenav";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 
 const MODULE = [
@@ -26,11 +28,28 @@ const MODULE = [
   MatTooltipModule,
   MatDialogModule,
   MatSnackBarModule,
-  MatSidenavModule
+  MatSidenavModule,
+  MatProgressSpinnerModule,
+  SweetAlert2Module
 ]
+
+/**
+ * @sweetalert2/ngx-sweetalert2
+ * https://www.npmjs.com/package/@sweetalert2/ngx-sweetalert2
+ * //=> Basic usage (forRoot can also take options, see details below)
+ * imports: [SweetAlert2Module.forRoot()],
+ *
+ * //=> In submodules only:
+ * imports: [SweetAlert2Module],
+ *
+ * //=> In submodules only, overriding options from your root module:
+ * imports: [SweetAlert2Module.forChild({ / options / })]
+ */
+
 
 @NgModule({
   imports: [
+    SweetAlert2Module.forRoot(),
     CommonModule,
     ...MODULE
   ],

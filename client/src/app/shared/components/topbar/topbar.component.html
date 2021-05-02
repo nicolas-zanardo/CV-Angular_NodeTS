@@ -1,18 +1,31 @@
-<mat-toolbar fxLayoutGap="15px" class="bck">
-  <div class="example-sidenav-content">
-    <button type="button" mat-mini-fab color="primary"  (click)="toggleSidenav()">
+<mat-toolbar class="d-flex justify-content-around fixed-top">
+
+  <div class="d-flex align-items-end">
+    <!--  Menu Sandwich-->
+    <button mat-icon-button id="sandwich" (click)="toggleSidenav()">
       <mat-icon>menu</mat-icon>
     </button>
+
+    <!--  logo & title web site-->
+    <span id="title-website" class="mr-3" routerLink="/">nicolas-zanardo.com</span>
+
+    <!--    navigation link-->
+    <div class="nav-link">
+      <span class="link" routerLink="/animation">Portfolio</span>
+      <span class="link" routerLink="/">Contact</span>
+    </div>
+
   </div>
-  <span class="link" routerLink="/">nicolas-zanardo.com</span>
-  <span fxFlex="auto">
-    <span class="link font-light" routerLink="/animation">Animation</span>
+
+
+  <span *ngIf="!jwtToken?.isAuthenticated" class="d-flex align-items-center">
+    <mat-icon routerLink="/connection" >account_circle</mat-icon>
   </span>
-  <span *ngIf="!jwtToken?.isAuthenticated" fxLayoutGap="15px" fxLayoutAlign="center center">
-    <mat-icon class="link" routerLink="/signin" matTooltip="Connexion">account_circle</mat-icon>
+
+  <span *ngIf="jwtToken?.isAuthenticated" class="d-flex align-items-center">
+    <mat-icon *ngIf="jwtToken?.isUser" routerLink="/profile">person</mat-icon>
+    <mat-icon *ngIf="jwtToken?.isAdmin" routerLink="/">person</mat-icon>
+    <mat-icon (click)="logout()" class="logout-media">power_settings_new</mat-icon>
   </span>
-  <span *ngIf="jwtToken?.isAuthenticated" fxLayoutGap="5px" fxLayoutAlign="center center">
-    <mat-icon class="link" routerLink="/profile" matTooltip="Votre Profile">person</mat-icon>
-    <mat-icon class="link" (click)="logout()" matTooltip="Déconnexion">power_settings_new</mat-icon>
-  </span>
+
 </mat-toolbar>

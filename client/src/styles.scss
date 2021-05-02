@@ -1,45 +1,41 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~bootstrap/scss/bootstrap";
-@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import '~@angular/material/theming';
+@import "reset";
+@import "fonts";
+@import "base-material";
+@import "classes";
+@import "base";
+@import "variables";
+@import "media";
+@import "success-and-error";
 
-mat-card {
-  padding: 0px !important;
-  background: $white !important;
+
+
+/** MATERIAL  */
+@include mat-core();
+
+// light theme
+$primary: mat-palette($mat-blue, 800);
+$accent: mat-palette($mat-blue-gray,600);
+
+$theme: mat-light-theme($primary, $accent);
+
+@include angular-material-theme($theme);
+
+// Dark theme
+$dark-primary: mat-palette($mat-blue,800);
+$dark-accent: mat-palette($mat-orange,800);
+
+$dark-theme: mat-dark-theme($primary, $accent);
+
+// Class
+.material-dark-theme {
+  @include angular-material-theme($dark-theme);
 }
 
-mat-form-field {
-  margin: 1rem 0 !important;
-}
 
-.title-form {
-  background-color: $indigo;
-  border-radius: 4px 4px 0 0;
-  color: $white;
-  padding: 1.5rem;
-}
 
-.link {
-  outline: 0;
-  cursor: pointer;
-}
 
-.mat-form {
-  padding: 0 2rem 2rem 2rem;
-  min-width: 150px;
-  max-width: 500px;
-  width: 100%;
-}
 
-.mat-full-width {
-  width: 100%;
-}
-
-.bck {
-  background-color: $indigo;
-  color: white;
-}
-
-.btn-valid {
-  background-color: $indigo;
-  color: white;
-}

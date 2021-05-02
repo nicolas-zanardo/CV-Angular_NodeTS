@@ -1,11 +1,11 @@
 <div class="my-5 py-5" fxLayout="row" fxLayoutAlign="center center">
   <!--  card -->
   <mat-card>
-    <mat-card-title class="text-black-50">Mon Compte</mat-card-title>
+    <mat-card-title>Mon Compte</mat-card-title>
     <mat-card-content *ngIf="currentUser | async; let user" fxLayout="column" fxLayoutGap="15px">
       <div>id: {{user._id}}</div>
       <div>email: {{user.email}}</div>
-      <div>nom: {{user.name}}</div>
+      <div>company: {{user.company}}</div>
       <div>password (hash): {{user.password}}</div>
       <div>role: {{user.role}}</div>
       <div>email Verifié: {{user.emailVerified | booleanToString}}</div>

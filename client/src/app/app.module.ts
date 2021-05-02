@@ -14,20 +14,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {AuthGuard} from "./shared/guards/auth.guard";
 
 // Services
-import {AuthService} from "./shared/services/auth.service";
+import {AuthService} from "./shared/services/security/auth.service";
 import {UserService} from "./shared/services/user.service";
-
-// Components
-import { AppComponent } from './app.component';
-import { HomepageComponent } from './homepage/homepage.component';
-import { SignupComponent } from './auth/signup/signup.component';
-import { SigninComponent } from './auth/signin/signin.component';
-import { TopbarComponent } from './shared/components/topbar/topbar.component';
-import { ProfileComponent } from './profile/profile.component';
-import { AnimationsComponent } from './animations/animations.component';
-import { PasswordResetComponent } from './auth/password-reset/password-reset.component';
-import { PasswordChangeComponent } from "./auth/password-change/password-change.component";
-import { SidenavComponent } from './shared/components/sidenav/sidenav.component';
 
 // Interceptors
 import {AuthInterceptor} from "./shared/interceptors/auth.interceptor";
@@ -35,7 +23,19 @@ import {AuthInterceptor} from "./shared/interceptors/auth.interceptor";
 // Pipe
 import { BooleanToStringPipe } from './shared/pipe/boolean-to-string.pipe';
 
+// Components
+import { PasswordResetComponent } from './auth/password-reset/password-reset.component';
+import { PasswordChangeComponent } from "./auth/password-change/password-change.component";
+import { SignupComponent } from './auth/signup/signup.component';
+import { SigninComponent } from './auth/signin/signin.component';
 
+import { AppComponent } from './app.component';
+import { HomepageComponent } from './homepage/homepage.component';
+import { TopbarComponent } from './shared/components/topbar/topbar.component';
+import { ProfileComponent } from './profile/profile.component';
+import { AnimationsComponent } from './animations/animations.component';
+import { SidenavComponent } from './shared/components/sidenav/sidenav.component';
+import { EmailVerificationComponent } from './email/email-verification/email-verification.component';
 
 
 
@@ -53,6 +53,7 @@ import { BooleanToStringPipe } from './shared/pipe/boolean-to-string.pipe';
     PasswordChangeComponent,
     PasswordResetComponent,
     SidenavComponent,
+    EmailVerificationComponent,
   ],
   imports: [
     BrowserModule,
@@ -61,7 +62,7 @@ import { BooleanToStringPipe } from './shared/pipe/boolean-to-string.pipe';
     ReactiveFormsModule,
     AppRoutingModule,
     LayoutModule,
-    NgbModule
+    NgbModule,
   ],
   providers: [
     {

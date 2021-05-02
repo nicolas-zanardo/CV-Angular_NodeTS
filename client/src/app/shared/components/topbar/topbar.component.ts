@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {AuthService} from "../../services/auth.service";
+import {AuthService} from "../../services/security/auth.service";
 import {JwtToken} from "../../models/jwt-token.model";
 import {Subscription} from "rxjs";
 import {ToggleService} from "../../services/toggle.service";
@@ -17,7 +17,6 @@ export class TopbarComponent implements OnInit, OnDestroy {
 
   public jwtToken?: JwtToken;
   public subscription?: Subscription;
-  public showFiller = false;
   public state: ToggleService;
 
   constructor(
@@ -28,22 +27,27 @@ export class TopbarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.authService.jwtToken.subscribe((jwtToken: JwtToken) => {
-      this.jwtToken = jwtToken;
-    })
+    this.getToken();
   }
 
-  ngOnDestroy() {
+
+  ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
   }
 
-  public logout():void {
+  private getToken(): void {
+    this.subscription = this.authService.jwtToken.subscribe((jwtToken: JwtToken) => {
+      this.jwtToken = jwtToken;
+    })
+  }
+
+  public logout(): void {
     this.authService.logout();
   }
 
-  toggleSidenav() {
+  toggleSidenav(): void {
     this.state.toggle()
   }
 

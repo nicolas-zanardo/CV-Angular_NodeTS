@@ -1,7 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 import jwt, {VerifyErrors} from "jsonwebtoken";
 import {User} from "../Database/models/user.model";
-import UserInterface from "../interface/UserInterface";
 import fs from "fs";
 
 const RSA_PUBLIC_KEY = fs.readFileSync('./key/key.pub');
@@ -14,23 +13,25 @@ const RSA_PUBLIC_KEY = fs.readFileSync('./key/key.pub');
  * @param next NextFunction
  * @return User | Status 401
  */
-export default function isLoggedIn(req:Request, res: Response, next: NextFunction) {
+export default function isLoggedIn(req:Request, res: Response, next: NextFunction): void {
     const token = req.headers.authorization;
     if (token) {
         jwt.verify(token, RSA_PUBLIC_KEY, (err:VerifyErrors | null , decoded: object | undefined ) => {
             if (err) {
-                return res.status(401).json('token_invalid')
+                console.log("isLoggedIn with TOKEN (401) => ",err)
+                return res.status(401).end();
             }
             // @ts-ignore
             const sub = decoded.sub;
-            return User.findOne({ '_id': sub }).exec( (err: VerifyErrors, user: UserInterface) => {
-                if (err || !user) { res.status(401).json('error') }
+            return User.findOne({ '_id': sub }).exec( (err: VerifyErrors, user: any) => {
+                if (err || !user) { res.status(409).end() }
                 // @ts-ignore
                 req.user = user;
                 next();
             });
         })
     } else {
-        return res.status(401).json('token_empty')
+        console.log("isLoggedIn NO TOKEN (401)")
+        return res.status(401).end();
     }
 }

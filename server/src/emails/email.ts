@@ -1,4 +1,4 @@
-import EmailInterface from "../interface/EmailInterface";
+import EmailInterface from "../interface/email.interface";
 import pug from 'pug';
 import Mail from "nodemailer/lib/mailer";
 const env = require(`../environment/${process.env.NODE_ENV}`)
@@ -9,14 +9,25 @@ export default class Email {
     private readonly from: string;
 
     constructor() {
-        this.from = env.form;
+        this.from = env.from;
         this.transporter = env.email;
     }
 
     /**
      * getTemplate
      * ------------
+     *
      * email factory
+     *
+     * Example:
+     *      new email().getTemplate("email-welcome", {
+     *      to: "contact@YOUR-EMAIL.com",
+     *      subject: "YOUR_SUBJECT",
+     *      metaData: {
+     *         name: "YOUR_NAME"
+     *         }
+     *      });
+     *
      * @param templateName string
      * @param options EmailInterface
      */
@@ -28,11 +39,10 @@ export default class Email {
             );
             const data = this.transporter.sendMail({
                 from: this.from,
-                        to: options.to,
-                        subject: options.subject,
-                        html: template
+                to: options.to,
+                subject: options.subject,
+                html: template
             }).then((data: Mail) => console.log(data)).catch((e: Error) => {console.log(e.message)})
-
         } catch(e) {
             throw new Error(e);
         }
@@ -51,12 +61,13 @@ export default class Email {
                 subject: "Vérifier votre email",
                 to: options.to,
                 html: pug.renderFile( `views/emails/verified.pug`, {
-                    name: options.metaData.name,
-                    url: `https://${ options.host }/email-verification/${options.metaData.userId}/${options.metaData.token}`
+                    url: `https://${ options.host }/api/user/email-verification/${options.metaData.userId}/${options.metaData.token}`,
+                    title: "Verifiez votre email",
+                    message: "Bonjour, ce mail vous a été envoyé car vous venez de vous inscrire sur le site web nicolas-zanardo.com.",
+                    actionBtn: "Pour activer votre compte, cliquez sur le lien ci-dessous."
                 })
             };
-            const response = await this.transporter.sendMail(email);
-            console.log(response);
+            await this.transporter.sendMail(email);
         } catch(e) {
             throw new Error(e);
         }
@@ -75,13 +86,15 @@ export default class Email {
                 subject: "Réinitialiser votre mot de passe",
                 to: options.to,
                 html: pug.renderFile( `views/emails/password-reset.pug`, {
-                    url: `https://${ options.host }/reset-password/${ options.metaData.userId }/${ options.metaData.token }`
+                    url: `https://${ options.host }/reset-password/${ options.metaData.userId }/${ options.metaData.token }`,
+                    title: "Modifier votre mot de passe",
+                    message: "Bonjour, vous recevez ce mail car vous avez fait une demande de réinitialisation de votre mot de passe.",
+                    actionBtn: "Vous pouvez cliquer sur le lien ci-dessous pour le réinitialiser."
                 })
             };
-            const response = await this.transporter.sendMail(email);
-            console.log(response);
+            await this.transporter.sendMail(email);
         } catch (e) {
-            throw e;
+            throw new Error(e);
         }
     }
 }

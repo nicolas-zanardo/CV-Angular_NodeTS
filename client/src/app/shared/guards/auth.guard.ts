@@ -1,26 +1,35 @@
-import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
-import {AuthService} from "../services/auth.service";
+import {Injectable} from '@angular/core';
+import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router} from '@angular/router';
+import {Observable} from 'rxjs';
+import {AuthService} from "../services/security/auth.service";
+import {map, tap} from "rxjs/operators";
 import {JwtToken} from "../models/jwt-token.model";
-import {map} from "rxjs/operators";
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(private AuthService: AuthService) {
+  constructor(private authService: AuthService, private router: Router) {
   }
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return this.AuthService.jwtToken.pipe(
-      map((jwtToken: JwtToken) => {
-        return jwtToken.isAuthenticated;
+
+
+    return this.authService.jwtToken.pipe(
+      map( (jwtToken: JwtToken) => {
+        if (jwtToken.isAuthenticated && jwtToken.isUser) {
+          return true;
+        } else {
+          this.router.navigate(['/connection']);
+          return false;
+        }
       })
     );
+
   }
 
 }

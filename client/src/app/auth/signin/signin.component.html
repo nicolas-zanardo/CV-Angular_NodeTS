@@ -1,52 +1,147 @@
-<div class="my-5 py-5" fxLayout="row" fxLayoutAlign="center center">
-  <!--  card -->
+<div class="container" fxLayoutAlign="center center">
+
   <mat-card>
-    <h3 class="title-form">Connexion</h3>
-    <!--    Error-->
-    <div class="message-error">
-      <div *ngIf="error" class="text-danger">{{error}}</div>
-    </div>
-    <mat-card-content>
-      <!--      form-->
-      <form [formGroup]="form" class="mat-form" #formDirective="ngForm" (ngSubmit)="submit(formDirective)" novalidate>
-        <!--        Email-->
-        <mat-form-field class="mat-full-width" floatLabel="auto">
-          <mat-label>email</mat-label>
-          <input matInput placeholder="mon@mail.fr" autocomplete="off" required formControlName="email">
-          <mat-icon matSuffix>mail</mat-icon>
-          <mat-error *ngFor="let validation of messages.validation.email">
-            <mat-error *ngIf="form.get('email')!.hasError(validation.type)">
-              {{validation.message}}
-            </mat-error>
-          </mat-error>
-        </mat-form-field>
-        <!--        Password -->
-        <mat-form-field class="matfield mat-full-width" floatLabel="auto">
-          <mat-label>Mot de passe</mat-label>
-          <input matInput autocomplete="off" required formControlName="password" [type]="hidePW ? 'text' : 'password'"
-                 autocomplete="off">
-          <mat-icon matSuffix
-                    (click)="hidePW = !hidePW">{{hidePW ? 'visibility' : 'visibility_off'}}
-          </mat-icon>
-          <mat-error *ngFor="let validation of messages.validation.password">
-            <mat-error *ngIf="form.get('password')!.hasError(validation.type)">
-              {{validation.message}}
-            </mat-error>
-          </mat-error>
-        </mat-form-field>
-        <!--        button-->
-        <div class="d-flex justify-content-between align-items-center flex-wrap mt-3">
-          <div class="order-2 order-sm-1">
-            <a mat-button (click)="openDialog(formDirective)">Mot de passe oublier?</a>
+
+    <!--    title-->
+    <mat-card-title>Connexion</mat-card-title>
+
+    <!--    FORM-->
+    <form [formGroup]="form" novalidate>
+
+      <!--
+        MESSAGES
+        Display message Info
+      -->
+      <div class="messages-form">
+
+        <!--        Info-->
+        <div *ngIf="!error" class="info-form">
+          <div class="d-flex flex-wrap welcome">
+            <div class="mr-1">Bienvenu sur votre</div>
+            <strong>espace de connexion</strong>
           </div>
-          <div class="d-flex justify-content-between align-items-center order-1 order-sm-2">
-            <a class="mx-2" routerLink="/signup" mat-raised-button>Inscription</a>
-            <button color="primary" mat-raised-button>Connexion</button>
+          <mat-icon class="security">https</mat-icon>
+        </div>
+
+        <!--401        Wrong password & email-->
+        <div *ngIf="error === 401" class="error-message">{{messageError}}</div>
+
+        <!--423        Email no validate-->
+        <div *ngIf="error === 423" class="w-100">
+          <!--          false-->
+          <div *ngIf="sendEmailVerification === 'false'" class="verify-email">
+            <div class="text-danger"><strong>Votre email n'est pas encore validé</strong></div>
+            <button mat-raised-button (click)="sendEmail()" color="warn">
+              Renvoyer un email
+            </button>
+          </div>
+          <!--          waiting-->
+          <div *ngIf="sendEmailVerification === 'waiting'" class="d-flex justify-content-center">
+            <mat-spinner class="spinner-border"></mat-spinner>
+          </div>
+          <!--          true-->
+          <div *ngIf="sendEmailVerification === 'true'" class="d-flex align-items-center email-send">
+            <div class="text-success mr-4"><strong>Email envoyé</strong></div>
+            <div class="circle ml-4">
+              <div class="swal2-icon swal2-success swal2-animate-success-icon" style="display: flex; height: 90px; width: 90px">
+                <div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div>
+                <span class="swal2-success-line-tip"></span>
+                <span class="swal2-success-line-long"></span>
+                <div class="swal2-success-ring"></div>
+                <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div>
+                <div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div>
+              </div>
+            </div>
           </div>
         </div>
 
-      </form>
-    </mat-card-content>
-  </mat-card>
+        <!--500        Error server-->
+        <div *ngIf="error >= 500" class="d-flex align-items-center justify-content-center w-100">
+          <div class="mr-2">
+            <span class="mr-1 text-danger">{{messageError}}</span>
+            <span *ngIf="sendEmailVerification === 'error'" class="text-danger">d'email</span>
+          </div>
 
+          <div class="ml-2">
+            <div>
+              <div class="swal2-icon swal2-error swal2-animate-error-icon" style="display: flex; height: 85px; width: 85px">
+                <span class="swal2-x-mark">
+                  <span class="swal2-x-mark-line-left"></span>
+                  <span class="swal2-x-mark-line-right"></span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--
+        ----- Input -----
+        FORM element
+      -->
+      <div class="p-3">
+        <!--        EMAIL-->
+        <mat-card-content>
+          <mat-form-field class="mat-full-width" floatLabel="auto">
+            <mat-label>email</mat-label>
+            <input matInput placeholder="mon@mail.fr" autocomplete="off" required formControlName="email">
+            <mat-icon matSuffix>mail</mat-icon>
+            <mat-error *ngFor="let validation of messages.validation.email">
+              <mat-error *ngIf="form.get('email')!.hasError(validation.type)">
+                {{validation.message}}
+              </mat-error>
+            </mat-error>
+          </mat-form-field>
+        </mat-card-content>
+
+        <!--       PASSWORD-->
+        <mat-card-content>
+          <mat-form-field class="example-full-width">
+            <mat-label>Mot de passe</mat-label>
+            <!--          input-->
+            <input matInput autocomplete="off"
+                   required formControlName="password" [type]="hidePW ? 'text' : 'password'"
+                   autocomplete="off"
+            >
+            <!--          icon-->
+            <mat-icon matSuffix
+                      (click)="hidePW = !hidePW">{{hidePW ? 'visibility' : 'visibility_off'}}
+            </mat-icon>
+            <!--          error-->
+            <mat-error *ngFor="let validation of messages.validation.password">
+              <mat-error *ngIf="form.get('password')!.hasError(validation.type)">
+                {{validation.message}}
+              </mat-error>
+            </mat-error>
+          </mat-form-field>
+        </mat-card-content>
+
+        <!--      button-->
+        <mat-card-actions class="d-flex justify-content-between flex-wrap">
+
+          <div class="mt-4 order-1 d-flex">
+            <button mat-raised-button color="primary" class="order-1" (click)="submit()">
+              <span class="material-icons">
+                lock
+              </span>
+              Connexion
+            </button>
+            <button mat-raised-button color="accent" class="order-0 ml-0" routerLink="/inscription">
+              <span class="material-icons">
+                fingerprint
+              </span>
+              Inscription
+            </button>
+          </div>
+
+          <div class="mr-4 mt-4 order-0">
+            <button mat-raised-button (click)="openDialog()">Mots de passe oublié ?</button>
+          </div>
+        </mat-card-actions>
+
+      </div>
+
+    </form>
+  </mat-card>
 </div>
+

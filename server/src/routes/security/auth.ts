@@ -1,9 +1,9 @@
 import {Router, Request, Response} from "express";
 import {CallbackError} from "mongoose";
 import {User} from "../../Database/models/user.model"
-import UserInterface from "../../interface/UserInterface";
 import bcrypt from "bcrypt";
 import jwt, {VerifyErrors} from "jsonwebtoken";
+import jwt_decode, {JwtDecodeOptions} from "jwt-decode";
 import * as fs from "fs";
 import Email from "../../emails/email";
 import { v4 as uuidv4 } from 'uuid';
@@ -15,9 +15,12 @@ const RSA_KEY_PUBLIC = fs.readFileSync('./key/key.pub');
 
 // Router() => create new User
 auth.post('/signup', (req:Request, res:Response) => {
-    const newUser = new User({
+    const newUser: any = new User({
         email: req.body.email,
-        name: req.body.name,
+        company: req.body.company,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        phone: req.body.phone,
         emailToken: uuidv4() ,
         password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10)),
         role: ['ROLE_USER'],
@@ -25,8 +28,10 @@ auth.post('/signup', (req:Request, res:Response) => {
     });
     newUser.save((err:CallbackError)=> {
         console.log(err)
-        if(err) { return res.status(406).json("l'email existe déjà") };
-        return res.status(200).json('user_create')
+        if(err) {
+            return res.status(400).end();
+        }
+        return res.status(201).end();
     });
     new Email().sendEmailVerification({
         to: newUser.email,
@@ -41,41 +46,48 @@ auth.post('/signup', (req:Request, res:Response) => {
 
 // Router() => create token
 auth.post('/signin', (req:Request, res:Response) => {
-    User.findOne({'email': req.body.email}).exec((err: CallbackError, user:UserInterface ) => {
-        if (user && bcrypt.compareSync(req.body.password, user.password) && user.emailVerified) {
-            const token = jwt.sign({
-                role: user.role,
-                name: user.name,
-                email: user.email
-            }, RSA_KEY_PRIVATE, {
-                algorithm: "RS256",
-                expiresIn: '900s', // 15min
-                subject: user._id.toString()
-            });
-            res.status(200).json(token);
-        } else if (!user.emailVerified) {
-            res.status(400).json('valider votre email')
-        } else {
-            res.status(401).json('signin_fail')
-        }
-    });
+    try {
+        User.findOne({'email': req.body.email}).exec(( err: CallbackError , user: any) => {
+            if (user && bcrypt.compareSync(req.body.password, user.password) && user.emailVerified) {
+                const token = jwt.sign({
+                    role: user.role,
+                    email: user.email
+                }, RSA_KEY_PRIVATE, {
+                    algorithm: "RS256",
+                    expiresIn: '900s', // 15min
+                    subject: user._id.toString()
+                });
+                return res.status(200).json(token);
+            } else if (user && bcrypt.compareSync(req.body.password, user.password) && !user.emailVerified) {
+                return res.status(423).end();
+            } else {
+                return res.status(401).end();
+            }
+        });
+    } catch (e) {
+        throw new Error(`ERROR MESSAGE: ${e.message}`);
+    }
+
 });
 
 // Refresh Token
 auth.get('/refresh-token', (req: Request, res: Response) => {
     const token = req.headers.authorization;
     if (token) {
-        jwt.verify(token, RSA_KEY_PUBLIC, (err: VerifyErrors | null, decoded: object | undefined) => {
-            if (err) {return res.status(403).json('token_wrong')}
-            const newToken = jwt.sign({}, RSA_KEY_PRIVATE, {
+        let decoded: any = jwt_decode(token);
+        jwt.verify(token, RSA_KEY_PUBLIC, (err: VerifyErrors | null, decode: any) => {
+            if (err) {return res.status(403).end()}
+            const newToken = jwt.sign({
+                role: decoded.role,
+                email: decoded.email
+            }, RSA_KEY_PRIVATE, {
                 algorithm: 'RS256',
                 expiresIn: '900s', // 15min
-                // @ts-ignore
-                subject: decoded.sub
+                subject: decode.sub,
             })
-            res.status(200).json(newToken);
+            return res.status(200).json(newToken);
         })
     } else {
-        res.json(403).json('token_noRefresh');
+        return res.json(403).end();
     }
 })

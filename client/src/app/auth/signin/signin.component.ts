@@ -1,13 +1,15 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
-import {AuthService} from "../../shared/services/auth.service";
+import {AuthService} from "../../shared/services/security/auth.service";
 import {Router} from "@angular/router";
 import {PasswordChangeComponent} from "../password-change/password-change.component";
 import {MessagesUsersService} from "../../shared/messages/messages-users.service";
 import {MatDialog} from "@angular/material/dialog";
 import {MatMenuTrigger} from "@angular/material/menu";
 import {UserService} from "../../shared/services/user.service";
-import {EmailModel} from "../../shared/models/email.model";
+import {SwalPortalTargets} from "@sweetalert2/ngx-sweetalert2";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {User} from "../../shared/models/user.model";
 
 
 @Component({
@@ -20,8 +22,10 @@ export class SigninComponent implements OnInit {
   @ViewChild('menuTrigger') menuTrigger: MatMenuTrigger | undefined;
 
   public form!: FormGroup;
-  public error: string | undefined;
+  public error: number = 0;
   public hidePW: boolean = false;
+  public messageError?: string;
+  public sendEmailVerification?: string;
 
   constructor(
     private fb: FormBuilder,
@@ -29,12 +33,13 @@ export class SigninComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     public messages: MessagesUsersService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
   ) {
   }
 
   ngOnInit(): void {
     this.createForms();
+
   }
 
   public createForms() {
@@ -44,48 +49,52 @@ export class SigninComponent implements OnInit {
         Validators.required
       ])),
       password: new FormControl('', Validators.compose([
-        Validators.required,
-        Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\\W)[a-zA-Z0-9_$/ \\W]+$')
+        Validators.required
       ]))
     })
   }
 
-  public openDialog(formDirective: FormGroupDirective): void {
+  public openDialog(): void {
     const dialogRef = this.dialog.open(PasswordChangeComponent, {
       restoreFocus: false
     });
     dialogRef.afterClosed().subscribe(result => {
-      if(result) {
-        this.userService.forgotPassword(result.value)
-          .subscribe(data => SigninComponent.handleSuccess(data, formDirective),
-            (error: Error) => SigninComponent.handleError(error)
-          );
+      if (result) {
+        console.log((result.value))
+        this.userService.forgotPassword(result.value);
       }
     });
   }
 
-  public submit(formDirective: FormGroupDirective): void {
-    if(this.form.valid) {
-      this.authService.signin(this.form.value).subscribe(() => {
+  public submit(): void {
+    this.sendEmailVerification = "false"
+    this.error = 0;
+    this.messageError = "";
+    if (this.form.valid) {
+      this.authService.signin(this.form.value).subscribe((data) => {
+
           this.router.navigate(['/']).catch((err: Error) => console.log(err));
         }, (err) => {
+          this.error = err.status;
           if (err.status === 401) {
-            this.error =  "L'utilisateur ou le mot de passe est incorrect"
+            this.messageError = "L'utilisateur ou le mot de passe est incorrect";
           }
-        if (err.status === 400) {
-          this.error =  "Vous devez valider votre email"
-        }
+          if (err.status === 423) {
+            this.messageError = "Vous devez valider votre email";
+          }
+          if (err.status >= 500) {
+            this.messageError = "Aucune communication avec le serveur";
+          }
         }
       );
     }
   }
 
-
-  private static handleSuccess(data: EmailModel | null, formDirective: FormGroupDirective) {
-    formDirective.resetForm();
-  }
-  private static handleError(err: Error) {
-    console.log(`MESSAGE FormValidation = ERROR`, err)
+  public sendEmail() {
+    this.sendEmailVerification = "waiting"
+    this.userService.sendEmailVerification(this.form.value).subscribe((data) =>
+        this.sendEmailVerification = "true"
+      ,(error: Error) => this.sendEmailVerification = "error")
   }
 
 }

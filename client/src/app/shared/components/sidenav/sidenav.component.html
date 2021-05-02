@@ -1,5 +1,85 @@
-<div [@sidenav]="state" class="sidenav">
-  <div class="font-light">
-    Portofollio
+<nav [@sidenav]="state">
+
+  <!--  Title-->
+  <div class="title-sidenav">
+    <h5> Menu </h5>
+    <hr>
   </div>
-</div>
+
+  <!--  Menu PUBLIC-->
+  <div class="link-sidenav" routerLink="/" fxLayout="raw">
+    <span class="material-icons mr-2">
+      home
+    </span>
+    Homepage
+  </div>
+  <div class="link-sidenav" routerLink="/animation" fxLayout="raw">
+    <span class="material-icons mr-2">
+      animation
+    </span>
+    Animation
+  </div>
+  <div class="link-sidenav" routerLink="/animation" fxLayout="raw">
+    <span class="material-icons mr-2">
+      dashboard
+    </span>
+    Portfolio
+  </div>
+  <div class="link-sidenav" routerLink="/animation" fxLayout="raw">
+    <span class="material-icons mr-2">
+      contact_mail
+    </span>
+    Contact
+  </div>
+
+  <!--  Menu ADMIN-->
+  <div fxLayout="column" class="mt-3" *ngIf="jwtToken?.isAdmin">
+    <!--    title-->
+    <div class="user-sidenav">
+      <h6> Admin </h6>
+      <!--    <hr>-->
+      <hr>
+    </div>
+    <!--  Menu USER-->
+    <div class="link-sidenav" routerLink="/profile" fxLayout="raw">
+      <span class="material-icons mr-1">
+        person
+      </span>
+      Profile
+    </div>
+    <div class="link-sidenav" fxLayout="raw" (click)="logout()">
+      <span class="material-icons mr-1">
+        power_settings_new
+      </span>
+      Déconnexion
+    </div>
+
+  </div>
+
+  <!--  Menu USER-->
+  <div fxLayout="column" class="mt-3" *ngIf="jwtToken?.isAuthenticated">
+    <!--    title-->
+    <div class="user-sidenav">
+      <h6> Profile </h6>
+      <!--    <hr>-->
+      <hr>
+    </div>
+    <!--  Menu USER-->
+    <div class="link-sidenav" routerLink="/profile" fxLayout="raw">
+      <span class="material-icons mr-1">
+        person
+      </span>
+      Profile
+    </div>
+    <div class="link-sidenav" fxLayout="raw" (click)="logout()">
+      <span class="material-icons mr-1">
+        power_settings_new
+      </span>
+      Déconnexion
+    </div>
+
+  </div>
+
+
+
+</nav>

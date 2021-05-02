@@ -1,22 +1,39 @@
 @import "~bootstrap/scss/bootstrap";
-.sidenav {
+@import "src/fonts";
+
+nav {
+  padding-top: 8vh;
+  background-color: $gray-800;
+  color: whitesmoke;
   display: block;
   position: absolute;
   z-index: 1000;
-  height: 93.2vh;
-  width: 200px;
-  background-color: $purple;
+  height: 100vh;
+  width: 150px;
+  .title-sidenav {
+    padding: 1rem 1rem 0 1rem !important;
+    h5 {
+      font-family: var(--font-title-logo);
+    }
+  }
+  .link-sidenav {
+    padding: 1rem !important;
+    transition: 300ms;
+    font-size: 0.9rem;
+    width: 150px !important;
+    cursor: pointer;
+    &:hover {
+      background-color: rgb(whitesmoke, 0.4);
+      transform: scale(1.1);
+      width: 143px !important;
+    }
+  }
+  .user-sidenav {
+    padding: 1rem 1rem 0 1rem  !important;
+  }
 }
 
-.font-light {
-  font-size: 0.8rem !important;
-  padding: 1.5rem;
-  color:  rgb($white, 0.9);
-  &:hover {
-    background-color: rgb($gray-100, 0.1);
-    transition: 0.5s;
-    font-size: 0.9rem !important;
-    padding: 2rem 1.27rem;
-    color: $white;
-  }
+hr {
+  color: white !important;
+  border: 1px solid whitesmoke !important;
 }

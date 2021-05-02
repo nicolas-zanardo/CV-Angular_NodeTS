@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "watch": "rm -rf dist && tsc --watch",
-    "start": "NODE_ENV=development node ./dist/bin/www"
+    "start": "NODE_ENV=dev nodemon ./dist/bin/www"
   },
   "dependencies": {
     "@types/nodemailer": "^6.4.1",
@@ -20,6 +20,7 @@
     "morgan": "~1.9.1",
     "nodemailer": "^6.5.0",
     "nodemailer-sparkpost-transport": "^2.2.0",
+    "nodemon": "^2.0.7",
     "pug": "^3.0.2",
     "uuid": "^8.3.2"
   },

@@ -1,0 +1,30 @@
+@import "~bootstrap/scss/bootstrap";
+@import "media";
+
+
+.container {
+  padding-top: 10vh;
+}
+
+.filter-black {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  transition: opacity 0.2s linear;
+}
+
+.hide {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  visibility: hidden;
+  transition: opacity 0.2s;
+}
